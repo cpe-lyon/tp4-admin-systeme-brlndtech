@@ -102,8 +102,25 @@ nano /etc/group
 groupe2:x:1002:u2,u4 (j'ai enlevé manuellement u3)
 
 u3 n'est plus en mésure de modifier le contenu du dossier /home/groupe2 et d'y accéder. 
+
 ```
 
+### Modifiez le compte de u4 de sorte que :
+— il expire au 1
+er juin 2019
+— il faut changer de mot de passe avant 90 jours
+— il faut attendre 5 jours pour modifier un mot de passe
+— l’utilisateur est averti 14 jours avant l’expiration de son mot de passe
+— le compte sera bloqué 30 jours après expiration du mot de passe
+
+### Quel est l’interpréteur de commandes (Shell) de l’utilisateur root ?
+
+
+
+
+### à quoi correspond l’utilisateur nobody ?
+
+En linux : nobody  est le nom conventionnel d'un compte d'utilisateur à qui aucun fichier n'appartient, qui n'est dans aucun groupe qui a des privilèges et dont les seules possibilités sont celles que tous les "autres utilisateurs" ont.
 
 
 
