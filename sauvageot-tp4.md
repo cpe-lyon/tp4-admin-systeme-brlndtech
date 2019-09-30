@@ -152,8 +152,7 @@ man sudo
 /minutes
 
 -> j'ai trouvé 15 minutes pour la validité du mdp.
-Le mot de passe est donc valide pendant 15 minutes, pour un utilisateur "Sudoeré
-
+Le mot de passe est donc valide pendant 15 minutes, pour un utilisateur "Sudoer"
 
 
 
