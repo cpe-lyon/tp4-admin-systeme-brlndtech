@@ -71,13 +71,15 @@ passwd u1
 ```
 id u1
 uid=1001(u1) gid=1001(groupe1) groups=1001(groupe1)
+cat /etc/passwd
 ```
 
 ### Quel utilisateur a pour uid 1003 ?
 
 ```
-u3
+id u3
 uid=1003(u3) gid=1002(groupe2) groups=1002(groupe2)
+cat /etc/passwd
 
 ```
 
@@ -113,7 +115,21 @@ er juin 2019
 — l’utilisateur est averti 14 jours avant l’expiration de son mot de passe
 — le compte sera bloqué 30 jours après expiration du mot de passe
 
+sudo chage -I 30 u4
+
+
 ### Quel est l’interpréteur de commandes (Shell) de l’utilisateur root ?
+
+```
+(en mode root)
+echo $SHELL 
+/bin/bash (sh plus récent = bourne against shell)
+
+(en mode utilisateur sans droits)
+echo $SHELL 
+/bin/sh (ancien shell)
+```
+
 
 
 
