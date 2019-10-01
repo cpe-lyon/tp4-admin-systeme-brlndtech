@@ -2,12 +2,12 @@
 
 ## Exercice 1. Gestion des utilisateurs et des groupes
 
-### Commencez par créer deux groupes groupe1 et groupe2
+### 1. Commencez par créer deux groupes groupe1 et groupe2
 
 <code> addgroup groupe1 </code>
 <code> addgroup groupe2 </code>
 
-### Créez ensuite 4 utilisateurs u1, u2, u3, u4 avec la commande useradd, en demandant la création de leur dossier personnel et avec bash pour shell
+### 2. Créez ensuite 4 utilisateurs u1, u2, u3, u4 avec la commande useradd, en demandant la création de leur dossier personnel et avec bash pour shell
 
 
 ```
@@ -16,7 +16,7 @@ useradd -m u2
 useradd -m u3
 useradd -m u4
 ```
-### Placez les utilisateurs dans les groupes :
+### 3. Placez les utilisateurs dans les groupes :
 
 usermod -a -G groupe1 u1
 usermod -a -G groupe1 u2
@@ -28,7 +28,7 @@ usermod -a -G groupe2 u2
 usermod -a -G groupe2 u3
 usermod -a -G groupe2 u4
 
-### Donnez deux moyens d’afficher les membres de groupe2 
+### 5. Donnez deux moyens d’afficher les membres de groupe2 
 ```
 cat /etc/group |grep groupe2
 groupe2:x:1002:u2,u3,u4
@@ -37,15 +37,14 @@ grep groupe2 /etc/group
 groupe2:x:1002:u2,u3,u4
 ```
 
-### Faites de groupe1 le groupe propriétaire de /home/u1 et /home/u2 et de groupe2 le groupe propriétaire de /home/u3 et /home/u4
+### 6. Faites de groupe1 le groupe propriétaire de /home/u1 et /home/u2 et de groupe2 le groupe propriétaire de /home/u3 et /home/u4
 ```
 usermod -g groupe1 u1 
 usermod -g groupe1 u2
 usermod -g groupe2 u3
 usermod -g groupe2 u4
 ```
-
-### Faites de groupe1 le groupe propriétaire de /home/u1 et /home/u2 et de groupe2 le groupe propriétaire de /home/u3 et /home/u4
+### 7. Créez deux répertoires/home/groupe1et/home/groupe2pour le contenu commun aux groupes, etmettez en place les permissions permettant aux membres de chaque groupe d’écrire dans le dossierassocié
 
 mkdir /home/groupe1
 mkdir /home/groupe2
@@ -55,31 +54,45 @@ chown u2:groupe2 groupe2
 
 chmod 720 groupe1 groupe2
 
-### Comment faire pour que, dans ces dossiers, seul le propriétaire d’un fichier ait le droit de renommer   ou supprimer ce fichier ?
+### 8. Comment faire pour que, dans ces dossiers, seul le propriétaire d’un fichier ait le droit de renommer   ou supprimer ce fichier ?
+
+Il faut donner des droits d'écriture (w) au propriétaire. 
+Je propose un un chmod 755
 
 ### Pouvez-vous vous connecter en tant que u1 ? Pourquoi ?
 
-```
-su u1
-``` 
+Le compte est désactivé, car nous n'avons pas paramétrer son mdp en amont,lors de la création du compte. 
+
 ### Activez le compte de l’utilisateur u1 et vérifiez que vous pouvez désormais vous connecter avec son compte
 ```
 passwd u1
+su u1
 ```
 
 ### Quels sont l’uid et le gid de u1 ?
 ```
+
+première option : 
+
 id u1
 uid=1001(u1) gid=1001(groupe1) groups=1001(groupe1)
-cat /etc/passwd
+
+deuxième option : 
+
+cat /etc/passwd (regarder vers le compte souhaité u1)
 ```
 
 ### Quel utilisateur a pour uid 1003 ?
 
 ```
+première option : 
+
 id u3
 uid=1003(u3) gid=1002(groupe2) groups=1002(groupe2)
-cat /etc/passwd
+
+deuxième option : 
+
+cat /etc/passwd (regarder vers le compte souhaité u3)
 
 ```
 
