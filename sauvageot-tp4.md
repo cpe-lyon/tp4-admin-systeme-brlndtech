@@ -101,6 +101,9 @@ cat /etc/passwd (regarder vers le compte souhaité u3)
 ```
 cat /etc/group | grep "groupe1"
 groupe1:x:1001:u1,u2,u4
+
+ou getent group groupe1
+
 ```
 
 ### Quel groupe a pour gid 1002 ? ?
@@ -108,6 +111,8 @@ groupe1:x:1001:u1,u2,u4
 ```
 cat /etc/group | grep "groupe2"
 groupe1:x:1002:u2,u3,u4
+
+ou getent group 1002
 ```
 
 ### Retirez l’utilisateur u3 du groupe groupe2. Que se passe-t-il ? Expliquez 
@@ -121,6 +126,7 @@ u3 n'est plus en mésure de modifier le contenu du dossier /home/groupe2 et d'y 
 ```
 
 ### Modifiez le compte de u4 de sorte que :
+
 — il expire au 1er juin 2019
 — il faut changer de mot de passe avant 90 jours
 — il faut attendre 5 jours pour modifier un mot de passe
@@ -167,11 +173,57 @@ man sudo
 -> j'ai trouvé 15 minutes pour la validité du mdp.
 Le mot de passe est donc valide pendant 15 minutes, pour un utilisateur "Sudoer"
 
+## Exercice 2 
+
+### 1. Dans votre $HOME, créez un dossier test, et dans ce dossier un fichier fichier contenant quelques lignes de texte. Quels sont les droits sur test et fichier ?
+
+```
+cd ~
+mkdir test 
+cd test 
+nano fichier 
+
+Dossier test : 755 (droits de base pour un dossier sous linux)
+fichier fichier : 644 (droits de base pour un fichier sous linux)
+
+```
+
+### 2. Retirez tous les droits sur ce fichier (même pour vous), puis essayez de le modifier et de l’aﬀicher entant queroot. Conclusion?
+```
+chmod 000 fichier 
+```
+
+Nous pouvons toujours accéder au fichier en root, et le modifier. Normal nous sommes le superuser.
+
+### 3. Redonnez vous les droits en écriture et exécution surfichierpuis exécutez la commandeecho "echoHello" > fichier. On a vu lors des TP précédents que cette commande remplace le contenu d’unfichier s’il existe déjà. Que peut-on dire au sujet des droits
+```
+chmod 300 fichier 
+echo "echo hello world" > fichier
+```
+Il nous est possible d'écrire dans ce fichier fichier. Le contenu précédent à été remplacé par : cho hello world
+
+### 4. Essayez d’exécuter le fichier. Est-ce que cela fonctionne ? Et avec sudo ? Expliquez.
+
+Cela ne va pas fonctionner car nous n'avons pas les droits d'éxécution de celui ci. Sauf si nous sommes en root. 
+
+```
+bash: ./fichier: Permission denied
+sudo ./fichier
+``` 
+### 5. Placez-vous dans le répertoiretest, et retirez-vous le droit en lecture pour ce répertoire. Listez lecontenu du répertoire, puis exécutez ou aﬀichez le contenu du fichierfichier. Qu’en déduisez-vous?Rétablissez le droit en lecture surtest
 
 
+```
+sudo chmod u-r ../test
+ls 
+cannot open directory '.': Permission denied
+./fichier 
+bash: ./fichier: Permission denied
+```
 
+Impossible d'afficher le contenu du dossier ni d'éxécuter le fichier. Normal nous n'avons plus les droits.
 
-
+### Créez dans test un fichiernouveauainsi qu’un répertoiresstest. Retirez au fichiernouveauet aurépertoiretestle droit en écriture. Tentez de modifier le fichiernouveau. Rétablissez ensuite le droiten écriture au répertoiretest. Tentez de modifier le fichiernouveau, puis de le supprimer. Que pouvez-vous déduire de toutes ces manipulations?
 
 
 
