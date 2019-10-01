@@ -223,9 +223,76 @@ bash: ./fichier: Permission denied
 
 Impossible d'afficher le contenu du dossier ni d'éxécuter le fichier. Normal nous n'avons plus les droits.
 
-### Créez dans test un fichiernouveauainsi qu’un répertoiresstest. Retirez au fichiernouveauet aurépertoiretestle droit en écriture. Tentez de modifier le fichiernouveau. Rétablissez ensuite le droiten écriture au répertoiretest. Tentez de modifier le fichiernouveau, puis de le supprimer. Que pouvez-vous déduire de toutes ces manipulations?
+### 6. Créez dans test un fichiernouveauainsi qu’un répertoiresstest. Retirez au fichiernouveauet aurépertoiretestle droit en écriture. Tentez de modifier le fichiernouveau. Rétablissez ensuite le droiten écriture au répertoiretest. Tentez de modifier le fichiernouveau, puis de le supprimer. Que pouvez-vous déduire de toutes ces manipulations?
+```
+nano nouveau
+mkdir sstest
+chmod u-w nouveau
+chmod u-w ../test
+nano nouveau
+[ Error writing nouveau: Permission denied ]
+chmod u+w ../test
+nano nouveau
+[ Error writing nouveau: Permission denied ] 
+rm nouveau
+rm: remove write-protected regular file 'nouveau'? yes
+ls fichier  sstest
+```
+Nous pouvons constater que les fichiers n'hérite pas des droits d'un dossier (si on ne le param pas) Ils ont des droits spécifique.
 
+### 7. Positionnez vous dans votre répertoire personnel, puis retirez le droit en exécution du répertoire test. Tentez de créer, supprimer, ou modifier un fichier dans le répertoire test, de vous y déplacer, d’en lister le contenu, etc…Qu’en déduisez vous quant au sens du droit en exécution pour les répertoires ?
+```
+ chmod u-x test
+ nano test/nouveau
+[ Path 'test' is not accessible ]
+ cd test/
+-bash: cd: test/: Permission denied
+ls test
+ls: cannot access 'test/sstest': Permission denied
+ls: cannot access 'test/fichier': Permission denied
+fichier  sstest
+```
 
+Nous ne pouvons éffectuer aucune de ces actions, car nous sommes bloquer par les droits d'éxécution qui ont été retiré.
 
+### 8. Rétablissez le droit en exécution du répertoire test. Attribuez au fichier fichier les droits suffisants pour qu’une autre personne de votre groupe puisse y accéder en lecture, mais pas en écriture.
 
+```
+chmod 640 test
 
+```
+
+### 9. Définissez un umask très restrictif qui interdit à quiconque à part vous l’accès en lecture ou en écriture, ainsi que la traversée de vos répertoires. Testez sur un nouveau fichier et un nouveau répertoire.
+
+```
+umask 022 test 
+
+```
+
+### 10. Définissez un umask équilibré qui vous autorise un accès complet et autorise un accès en lecture aux membres de votre groupe. Testez sur un nouveau fichier et un nouveau répertoire.
+
+```
+
+umask 037 test 
+
+``` 
+
+### 11. Transcrivez les commandes suivantes de la notation classique à la notation octale ou vice-versa (vouspourrez vous aider de la commandestatpour valider vos réponses) :
+
+```
+chmod u=rx,g=wx,o=r fic = chmod 534 -r-x--wx-r--
+chmod uo+w,g-rx fic = chmod 706 -rwx-x-rw-
+
+``` 
+### Affichez les droits sur le programme passwd. Que remarquez-vous ? En affichant les droits du fichier /etc/passwd, pouvez-vous justifier les permissions sur le programme passwd ?
+
+```
+cd /etc 
+ls -l passwd    
+-rw-r--r-- 1 root root 1801 sept. 30 21:15 /etc/passwd
+
+```
+
+Le fichier est accessible par le prop en lecture / ecriture, et est juste lisible pour les membres du groupe de l'owner et les autres. 
+
+Il est tout a fait normal que les autres et le groupe ne puisse pas modifier ce fichiers, qui contient un ensemble de données critique concernant l'architecture d'un réseau UNIX.
