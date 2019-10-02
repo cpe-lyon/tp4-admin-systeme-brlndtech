@@ -265,7 +265,7 @@ chmod 640 test
 ### 9. Définissez un umask très restrictif qui interdit à quiconque à part vous l’accès en lecture ou en écriture, ainsi que la traversée de vos répertoires. Testez sur un nouveau fichier et un nouveau répertoire.
 
 ```
-umask 022 test 
+umask 077 test 
 
 ```
 
