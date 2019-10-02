@@ -273,9 +273,10 @@ umask 077 test
 
 ```
 
-umask 037 test 
+umask 022 test 
 
 ``` 
+
 
 ### 11. Transcrivez les commandes suivantes de la notation classique à la notation octale ou vice-versa (vouspourrez vous aider de la commandestatpour valider vos réponses) :
 
@@ -284,7 +285,7 @@ chmod u=rx,g=wx,o=r fic = chmod 534 -r-x--wx-r--
 chmod uo+w,g-rx fic = chmod 706 -rwx-x-rw-
 
 ``` 
-### Affichez les droits sur le programme passwd. Que remarquez-vous ? En affichant les droits du fichier /etc/passwd, pouvez-vous justifier les permissions sur le programme passwd ?
+### 12. Affichez les droits sur le programme passwd. Que remarquez-vous ? En affichant les droits du fichier /etc/passwd, pouvez-vous justifier les permissions sur le programme passwd ?
 
 ```
 cd /etc 
