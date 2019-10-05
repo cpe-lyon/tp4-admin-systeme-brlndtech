@@ -11,10 +11,8 @@
 
 
 ```
-useradd -m u1
-useradd -m u2
-useradd -m u3
-useradd -m u4
+useradd u1 (2,3,4) -m -s /bin/bash
+
 ```
 ### 3. Placez les utilisateurs dans les groupes :
 
@@ -28,22 +26,26 @@ usermod -a -G groupe2 u2
 usermod -a -G groupe2 u3
 usermod -a -G groupe2 u4
 
-### 5. Donnez deux moyens d’afficher les membres de groupe2 
+### 4. Donnez deux moyens d’afficher les membres de groupe2 
 ```
-cat /etc/group |grep groupe2
+cat /etc/group | grep groupe2
 groupe2:x:1002:u2,u3,u4
 
 grep groupe2 /etc/group
+
 groupe2:x:1002:u2,u3,u4
 ```
 
-### 6. Faites de groupe1 le groupe propriétaire de /home/u1 et /home/u2 et de groupe2 le groupe propriétaire de /home/u3 et /home/u4
+### 5. Faites de groupe1 le groupe propriétaire de /home/u1 et /home/u2 et de groupe2 le groupe propriétaire de /home/u3 et /home/u4
 ```
-usermod -g groupe1 u1 
-usermod -g groupe1 u2
-usermod -g groupe2 u3
-usermod -g groupe2 u4
+chown <user>:<groupe> <dossier>
+
+
 ```
+### 6. Remplacez le groupe primaire des utilisateurs :
+
+usermod -g <group> <user>
+
 ### 7. Créez deux répertoires/home/groupe1et/home/groupe2pour le contenu commun aux groupes, etmettez en place les permissions permettant aux membres de chaque groupe d’écrire dans le dossierassocié
 
 mkdir /home/groupe1
@@ -52,24 +54,24 @@ mkdir /home/groupe2
 chown u1:groupe1 groupe1
 chown u2:groupe2 groupe2
 
-chmod 720 groupe1 groupe2
+chmod 730 -R groupe1 groupe2
 
 ### 8. Comment faire pour que, dans ces dossiers, seul le propriétaire d’un fichier ait le droit de renommer   ou supprimer ce fichier ?
 
 Il faut donner des droits d'écriture (w) au propriétaire. 
-Je propose un un chmod 755
+Je propose un un chmod 711
 
-### Pouvez-vous vous connecter en tant que u1 ? Pourquoi ?
+### 9. Pouvez-vous vous connecter en tant que u1 ? Pourquoi ?
 
 Le compte est désactivé, car nous n'avons pas paramétrer son mdp en amont,lors de la création du compte. 
 
-### Activez le compte de l’utilisateur u1 et vérifiez que vous pouvez désormais vous connecter avec son compte
+### 10. Activez le compte de l’utilisateur u1 et vérifiez que vous pouvez désormais vous connecter avec son compte
 ```
 passwd u1
 su u1
 ```
 
-### Quels sont l’uid et le gid de u1 ?
+### 11. Quels sont l’uid et le gid de u1 ?
 ```
 
 première option : 
@@ -79,10 +81,11 @@ uid=1001(u1) gid=1001(groupe1) groups=1001(groupe1)
 
 deuxième option : 
 
-cat /etc/passwd (regarder vers le compte souhaité u1)
+cat /etc/passwd | grep "u1"(regarder vers le compte souhaité u1)
+u1:x:1001:1001::/home/u1:/bin/bash
 ```
 
-### Quel utilisateur a pour uid 1003 ?
+### 12. Quel utilisateur a pour uid 1003 ?
 
 ```
 première option : 
@@ -92,11 +95,12 @@ uid=1003(u3) gid=1002(groupe2) groups=1002(groupe2)
 
 deuxième option : 
 
-cat /etc/passwd (regarder vers le compte souhaité u3)
+cat /etc/passwd | grep "u3" (regarder vers le compte souhaité u3)
+
 
 ```
 
-### Quel est l’id du groupe groupe1 ?
+### 13. Quel est l’id du groupe groupe1 ?
 
 ```
 cat /etc/group | grep "groupe1"
@@ -106,7 +110,7 @@ ou getent group groupe1
 
 ```
 
-### Quel groupe a pour gid 1002 ? ?
+### 14. Quel groupe a pour gid 1002 ? ?
 
 ```
 cat /etc/group | grep "groupe2"
@@ -115,17 +119,16 @@ groupe1:x:1002:u2,u3,u4
 ou getent group 1002
 ```
 
-### Retirez l’utilisateur u3 du groupe groupe2. Que se passe-t-il ? Expliquez 
+### 15. Retirez l’utilisateur u3 du groupe groupe2. Que se passe-t-il ? Expliquez 
 
 ```
-nano /etc/group
-groupe2:x:1002:u2,u4 (j'ai enlevé manuellement u3)
+gpasswd -d u3 groupe2
 
 u3 n'est plus en mésure de modifier le contenu du dossier /home/groupe2 et d'y accéder. 
 
 ```
 
-### Modifiez le compte de u4 de sorte que :
+### 16. Modifiez le compte de u4 de sorte que :
 
 — il expire au 1er juin 2019
 — il faut changer de mot de passe avant 90 jours
@@ -140,7 +143,7 @@ u3 n'est plus en mésure de modifier le contenu du dossier /home/groupe2 et d'y 
 - sudo chage -I 30 u4
 
 
-### Quel est l’interpréteur de commandes (Shell) de l’utilisateur root ?
+### 17. Quel est l’interpréteur de commandes (Shell) de l’utilisateur root ?
 
 ```
 (en mode root)
@@ -159,11 +162,11 @@ cat /etc/passwd
 exemple pour root : root:x:0:0:root:/root: **/bin/sh**
 ```
 
-### à quoi correspond l’utilisateur nobody ?
+### 18. à quoi correspond l’utilisateur nobody ?
 
-En linux : nobody  est le nom conventionnel d'un compte d'utilisateur à qui aucun fichier n'appartient, qui n'est dans aucun groupe qui a des privilèges et dont les seules possibilités sont celles que tous les "autres utilisateurs" ont.
+ nobody  est le nom conventionnel d'un compte d'utilisateur à qui aucun fichier n'appartient, qui n'est dans aucun groupe qui a des privilèges et dont les seules possibilités sont celles que tous les "autres utilisateurs" ont.
 
-### Par défaut, combien de temps la commandesudoconserve-t-elle votre mot de passe en mémoire?Quelle commande permet de forcersudoà oublier votre mot de passe?
+### 19. Par défaut, combien de temps la commandesudoconserve-t-elle votre mot de passe en mémoire?Quelle commande permet de forcersudoà oublier votre mot de passe?
 
 Je ne le savais pas de base, alors j'ai consulté le manuel pour la commande sudo. 
 
@@ -193,14 +196,14 @@ fichier fichier : 644 (droits de base pour un fichier sous linux)
 chmod 000 fichier 
 ```
 
-Nous pouvons toujours accéder au fichier en root, et le modifier. Normal nous sommes le superuser.
+Nous pouvons toujours accéder au fichier en root, et le modifier. Normal nous sommes le superuser. (le système de droit ne s'applique pas à lui.)
 
 ### 3. Redonnez vous les droits en écriture et exécution surfichierpuis exécutez la commandeecho "echoHello" > fichier. On a vu lors des TP précédents que cette commande remplace le contenu d’unfichier s’il existe déjà. Que peut-on dire au sujet des droits
 ```
 chmod 300 fichier 
 echo "echo hello world" > fichier
 ```
-Il nous est possible d'écrire dans ce fichier fichier. Le contenu précédent à été remplacé par : cho hello world
+Il nous est possible d'écrire dans ce fichier fichier. Le contenu précédent à été remplacé par : echo hello world
 
 ### 4. Essayez d’exécuter le fichier. Est-ce que cela fonctionne ? Et avec sudo ? Expliquez.
 
@@ -284,12 +287,12 @@ chmod u=rx,g=wx,o=r fic = chmod 534 -r-x--wx-r--
 chmod uo+w,g-rx fic = chmod 706 -rwx-x-rw-
 
 ``` 
-### Affichez les droits sur le programme passwd. Que remarquez-vous ? En affichant les droits du fichier /etc/passwd, pouvez-vous justifier les permissions sur le programme passwd ?
+### 12. Affichez les droits sur le programme passwd. Que remarquez-vous ? En affichant les droits du fichier /etc/passwd, pouvez-vous justifier les permissions sur le programme passwd ?
 
 ```
 cd /etc 
 ls -l passwd    
--rw-r--r-- 1 root root 1801 sept. 30 21:15 /etc/passwd
+-rw-r--r-- 1 root root 1801 oct. 01 21:15 /etc/passwd
 
 ```
 
